@@ -1,0 +1,24 @@
+{
+  "name": "custom-cucumber-report-generator",
+  "version": "0.0.1",
+  "description": "To create custom cucumber report based on user input",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pjagga/custom-cucumber-report-generator.git"
+  },
+  "author": "Priyanka & Wendy",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pjagga/custom-cucumber-report-generator/issues"
+  },
+  "homepage": "https://github.com/pjagga/custom-cucumber-report-generator#readme",
+  "dependencies": {
+    "cucumber-html-reporter": "^4.0.5",
+    "jest": "^24.5.0",
+    "minimist": "^1.2.0"
+  }
+}
