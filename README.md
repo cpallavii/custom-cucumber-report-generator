@@ -9,9 +9,9 @@ To create custom reports from user inputs.
 JSON reponse as follow :
 ```
 {
-  jsonFile: "result from cucumber run",
-  output: "name of report file"
-  screenshotsDirectory: "screenshot dir",
+  jsonFile: "result-from-cucumber-run.json",
+  output: "path-to/name-of-report-file.html"
+  screenshotsDirectory: "path-to/screenshots-dir/",
   metaData: {
     "App" : "1.0.0",
     "Env" : "Dev",

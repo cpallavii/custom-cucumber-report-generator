@@ -4,7 +4,9 @@
   "description": "To create custom cucumber report based on user input",
   "main": "index.js",
   "scripts": {
-    "test": "test"
+    "sample-report": "node index.js -t",
+    "test": "test",
+    "coverage": "./node_modules/.bin/istanbul cover test"
   },
   "repository": {
     "type": "git",
@@ -18,7 +20,15 @@
   "homepage": "https://github.com/pjagga/custom-cucumber-report-generator#readme",
   "dependencies": {
     "cucumber-html-reporter": "^4.0.5",
-    "jest": "^24.5.0",
+    "fs-extra": "^7.0.1",
+    "lodash": "^4.17.11",
     "minimist": "^1.2.0"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "istanbul": "^0.4.5",
+    "jest": "^24.5.0",
+    "mock-fs": "^4.8.0",
+    "simple-mock": "^0.8.0"
   }
 }

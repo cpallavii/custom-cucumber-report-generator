@@ -1,0 +1,15 @@
+{
+    "theme": "bootstrap",
+    "jsonFile": "sample/sample-results.json",
+    "output": "output/report/cucumber_report.html",
+    "screenshotsDirectory": "output/screenshots/",
+    "reportSuiteAsScenarios": false,
+    "launchReport": false,
+    "storeScreenshots": true,
+    "metadata": {
+        "App Version": "0.1.0",
+        "Test Environment": "LocalDev",
+        "Browser": "Chrome/74.0.3723.0",
+        "Platform": "MACOSX"
+    }
+}
