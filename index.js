@@ -7,8 +7,8 @@ let args
 
 // arguments:
 // -t > run using sample results.json
-// -f > cucumber results json file eg. sample/results.json
-// -o > output folder location eg. output/report
+// -f > cucumber results json file eg. sample/sample-results.json
+// -o > output folder location eg. output/report/my-report.html
 // -s > screenshots folder location eg. output/screenshots
 // -i > input file path or json object
 
