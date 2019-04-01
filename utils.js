@@ -82,6 +82,7 @@ function generateReport(){
 }
 
 module.exports = {
+  getargs,
   getOptions,
   generateReport
 }
