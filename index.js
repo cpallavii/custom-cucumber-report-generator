@@ -47,18 +47,6 @@ if (args.f) {
     throw new Error('Missing "-f <filename>" parameter OR -i <json> parameter')
 }
 
-// NOT WORKING
-// else if (_.isObject(args.i)) {
-//     setOptions = false
-//     options = JSON.parse(args.i)
-
-//     // check the object parameter passed has the minimum values required
-//     if (!(options.hasOwnProperty('jsonFile') && options.hasOwnProperty('output'))) {
-//         throw new Error('-i {options} is missing options.jsonFile and options.output parameters')
-//     }
-
-// } 
-
 if (setOptions) {
 
     // Check if jsonFile exists
