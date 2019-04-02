@@ -3,12 +3,25 @@ const parseArgs = require('minimist');
 const fse = require('fs-extra');
 const _ = require('lodash');
 
-function getargs() {
+function getArgs() {
+
+// // arguments:
+// // -t > run using sample results.json
+// // -f > cucumber results json file eg. sample/sample-results.json
+// // -o > output folder location eg. output/report/my-report.html
+// // -s > screenshots folder location eg. output/screenshots
+// // -i > input file path
+
   if (process.argv.length >= 2) {
     const argsv = parseArgs(process.argv);
-    return argsv;
+    if(argsv.f || argsv.i || argsv.t) {
+      return argsv;
+    } else {
+      throw new Error('Missing parameter "-f <filename>" OR -i <json>');
+    }
+    
   } else {
-    throw new Error('Missing parameter "-f <filename>" OR -i <json>');
+    throw new Error('Incorrect number of parameters called, expect "-f <filename>" OR -i <json>');
   }
 }
 
@@ -17,6 +30,13 @@ function getOptions() {
   let resultsFile;
   let options;
   let setOptions = true;
+
+// // arguments:
+// // -t > run using sample results.json
+// // -f > cucumber results json file eg. sample/sample-results.json
+// // -o > output folder location eg. output/report/my-report.html
+// // -s > screenshots folder location eg. output/screenshots
+// // -i > input file path or json object
 
   if (args.f) {
     resultsFile = args.f;
@@ -76,13 +96,13 @@ function getOptions() {
   return options
 }
 
-function generateReport(){
-   let finalOptions = getOptions()
+function generateReport() {
+  let finalOptions = getOptions()
   return reporter.generate(finalOptions);
 }
 
 module.exports = {
-  getargs,
+  getArgs,
   getOptions,
   generateReport
 }
