@@ -6,7 +6,7 @@
   "scripts": {
     "sample-report": "node index.js -t",
     "test": "jest",
-    "coverage": "./node_modules/.bin/istanbul cover test"
+    "coverage": "jest --coverage"
   },
   "repository": {
     "type": "git",
