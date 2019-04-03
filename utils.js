@@ -4,39 +4,39 @@ const fse = require('fs-extra');
 const _ = require('lodash');
 
 function getArgs() {
-
-// // arguments:
-// // -t > run using sample results.json
-// // -f > cucumber results json file eg. sample/sample-results.json
-// // -o > output folder location eg. output/report/my-report.html
-// // -s > screenshots folder location eg. output/screenshots
-// // -i > input file path
+  // // arguments:
+  // // -t > run using sample results.json
+  // // -f > cucumber results json file eg. sample/sample-results.json
+  // // -o > output folder location eg. output/report/my-report.html
+  // // -s > screenshots folder location eg. output/screenshots
+  // // -i > input file path
 
   if (process.argv.length >= 2) {
     const argsv = parseArgs(process.argv);
-    if(argsv.f || argsv.i || argsv.t) {
+    if (argsv.f || argsv.i || argsv.t) {
       return argsv;
     } else {
       throw new Error('Missing parameter "-f <filename>" OR -i <json>');
     }
-    
   } else {
-    throw new Error('Incorrect number of parameters called, expect "-f <filename>" OR -i <json>');
+    throw new Error(
+      'Incorrect number of parameters called, expect "-f <filename>" OR -i <json>'
+    );
   }
 }
 
 function getOptions() {
-  const args = getargs();
+  const args = getArgs();
   let resultsFile;
   let options;
   let setOptions = true;
 
-// // arguments:
-// // -t > run using sample results.json
-// // -f > cucumber results json file eg. sample/sample-results.json
-// // -o > output folder location eg. output/report/my-report.html
-// // -s > screenshots folder location eg. output/screenshots
-// // -i > input file path or json object
+  // // arguments:
+  // // -t > run using sample results.json
+  // // -f > cucumber results json file eg. sample/sample-results.json
+  // // -o > output folder location eg. output/report/my-report.html
+  // // -s > screenshots folder location eg. output/screenshots
+  // // -i > input file path or json object
 
   if (args.f) {
     resultsFile = args.f;
@@ -49,11 +49,9 @@ function getOptions() {
     }
 
     options = fse.readJSONSync(args.i);
-    if (
-      !(options.hasOwnProperty('jsonFile') && options.hasOwnProperty('output'))
-    ) {
+    if (!options.hasOwnProperty('jsonFile')) {
       throw new Error(
-        '-i {options} is missing options.jsonFile and options.output parameters'
+        '-i {options} is missing options.jsonFile'
       );
     }
   } else {
@@ -61,7 +59,7 @@ function getOptions() {
   }
 
   if (setOptions) {
-    if (fse.pathExistsSync(`/${resultsFile}`)) {
+    if (!fse.pathExistsSync(`${resultsFile}`)) {
       throw new Error(`No file found in path: ${resultsFile}`);
     }
 
@@ -93,11 +91,11 @@ function getOptions() {
   if (!options.hasOwnProperty('theme')) {
     options.theme = 'bootstrap';
   }
-  return options
+  return options;
 }
 
 function generateReport() {
-  let finalOptions = getOptions()
+  let finalOptions = getOptions();
   return reporter.generate(finalOptions);
 }
 
@@ -105,4 +103,4 @@ module.exports = {
   getArgs,
   getOptions,
   generateReport
-}
+};
