@@ -6,12 +6,12 @@ describe('Unit test for custom report generator', () => {
       process.argv = []
     })
 
-    // // arguments:
+    // arguments:
 
-  // // -o > output folder location eg. output/report/my-report.html
-  // // -s > screenshots folder location eg. output/screenshots
-  // // -i > input file path
-  
+    // -o > output folder location eg. output/report/my-report.html
+    // -s > screenshots folder location eg. output/screenshots
+    // -i > input file path
+
     test('Error message is returned when incorrect number of parameters passed in', () => {
       expect(getArgs).toThrow('Incorrect number of parameters called, expect "-f <filename>" OR -i <json>')
     })
@@ -90,13 +90,15 @@ describe('Unit test for custom report generator', () => {
       const options = getOptions()
       expect(options).toEqual(expectedOptions)
     })
+
     test('Verify no error message if fileName is not passed for option -i', () => {
       process.argv.push('', '-i', '')
       expect(getOptions).toThrow('Missing \"-f <filename>\" parameter OR -i <json> parameter')
     })
+
     test('Verify report file path is correct for -i parameter', () => {
       process.argv.push('', '-i', 'fake/fake-report-format.json')
-      expect(getOptions).toThrow(`fake/fake-report-format.json: ENOENT: no such file or directory, open 'fake/fake-report-format.json'`)
+      expect(getOptions).toThrow(`No file found in path: fake/fake-report-format.json`)
     })
     test('Verify report is generated for parameter -i', () => {
       process.argv.push('', '-i', 'sample/sample-input.json')

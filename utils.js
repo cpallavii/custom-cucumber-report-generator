@@ -44,7 +44,7 @@ function getOptions() {
     resultsFile = 'sample/sample-results.json';
   } else if (_.isString(args.i)) {
     setOptions = false;
-    if (fse.pathExistsSync(`/${args.i}`)) {
+    if (!fse.pathExistsSync(`${args.i}`)) {
       throw new Error(`No file found in path: ${args.i}`);
     }
 
