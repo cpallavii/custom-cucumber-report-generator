@@ -85,7 +85,7 @@ function getOptions() {
     }
 
     if (args.s) {
-      (options.screenshotsDirectory = args.s), (options.storeScreenshot = true);
+      (options.screenshotsDirectory = args.s), (options.storeScreenshots = true);
     }
   }
   if (!options.hasOwnProperty('theme')) {

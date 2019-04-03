@@ -82,6 +82,14 @@ describe('Unit test for custom report generator', () => {
       expectedOptions.output = 'output/report.html'
       expect(options).toEqual(expectedOptions)
     })
+    test('Verify report is generated for parameter -f and -s', () => {
+      process.argv.push('', '-f', 'sample/sample-results.json', '-s', 'output/screenshots')
+      expectedOptions.screenshotsDirectory = "output/screenshots"
+      expectedOptions.output = "output/report/cucumber-report.html"
+      expectedOptions.storeScreenshots = true
+      const options = getOptions()
+      expect(options).toEqual(expectedOptions)
+    })
     test('Verify no error message if fileName is not passed for option -i', () => {
       process.argv.push('', '-i', '')
       expect(getOptions).toThrow('Missing \"-f <filename>\" parameter OR -i <json> parameter')
@@ -101,17 +109,5 @@ describe('Unit test for custom report generator', () => {
       expectedOptions.storeScreenshots = true
       expect(options).toEqual(expectedOptions)
     })
-    // test.only('Verify file path exists', () => {
-    //   process.argv.push('', '-s', 'fake/')
-    //   expect(getOptions).toThrow(`fake/fake-report-format.json: ENOENT: no such file or directory, open 'fake/fake-report-format.json'`)
-    // })
-  })
-
-  describe('Generate report using cmd line options', () => {
-
-  })
-
-  describe('Generate report using file input', () => {
-
   })
 })
