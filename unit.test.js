@@ -1,4 +1,6 @@
 const { getOptions, getArgs } = require('./utils')
+const fsmock = require('mock-fs')
+
 describe('Unit test for custom report generator', () => {
   describe('Validate different parameters', () => {
     beforeEach(() => {
@@ -111,5 +113,54 @@ describe('Unit test for custom report generator', () => {
       expectedOptions.storeScreenshots = true
       expect(options).toEqual(expectedOptions)
     })
+    test('Verify report is generated for parameter -i and no theme', () => {
+      let noTheme = {
+        "jsonFile": "sample/sample-results.json",
+        "output": "output/report/cucumber_report.html",
+        "screenshotsDirectory": "output/screenshots/",
+        "reportSuiteAsScenarios": false,
+        "launchReport": false,
+        "storeScreenshots": true
+      }
+
+      fsmock({
+        'sample': {
+          'no-theme.json': `${JSON.stringify(noTheme)}`,
+          'sample-results.json': { "abc": "def" }
+        },
+      });
+
+      process.argv.push('', '-i', 'sample/no-theme.json')
+      const options = getOptions()
+      let expectedNoTheme = noTheme
+      expectedNoTheme.theme = 'bootstrap'
+      expect(options).toEqual(noTheme)
+
+      fsmock.restore()
+    })
+
+    test('Verify report is not generated for parameter -i and no jsonFile', () => {
+
+      let noJsonFile = {
+        "output": "output/report/cucumber_report.html",
+        "screenshotsDirectory": "output/screenshots/",
+        "reportSuiteAsScenarios": false,
+        "launchReport": false,
+        "storeScreenshots": true
+      }
+
+      fsmock({
+        'sample': {
+          'no-jsonFile.json': `${JSON.stringify(noJsonFile)}`,
+          'sample-results.json': { "abc": "def" }
+        },
+      });
+
+      process.argv.push('', '-i', 'sample/no-jsonFile.json')
+      expect(getOptions).toThrow(`-i {options} is missing options.jsonFile`)
+
+      fsmock.restore()
+    })
+
   })
 })
