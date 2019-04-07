@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "sample-report": "node index.js -t",
-    "test": "test",
-    "coverage": "./node_modules/.bin/istanbul cover test"
+    "test": "jest",
+    "coverage": "jest --coverage"
   },
   "repository": {
     "type": "git",
