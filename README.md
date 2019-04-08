@@ -3,9 +3,9 @@
 #### Purpose
 To create custom reports from user inputs.
 
-#### How to generate my report ?
-
-### Requirement
+#### Possible user inputs
+Possible user input can be a ```JSON``` or ```filepath```
+### JSON Format
 JSON reponse as follow :
 ```
 {
@@ -23,4 +23,11 @@ JSON reponse as follow :
 ```
 
 or "FilePath"
+
+#### How to generate my report ?
+
+yarn add custom-cucumber-report-generator
+
+
+
 
