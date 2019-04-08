@@ -16,8 +16,11 @@ or
 ```
 yarn add custom-cucumber-report-generator
 ```
+
 ### Pre-requisites
-Expects the result of your cucumber test to be saved into a json file.
+ 
+ Require the result of cucumber test run to be saved as JSON file. The JSON file will need to be used with the `[-f]` parameter.
+
 
 ### Format for customising cucumber report:
 
