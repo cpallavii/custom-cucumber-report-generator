@@ -16,11 +16,8 @@ or
 ```
 yarn add custom-cucumber-report-generator
 ```
-
-### Cucumber result input
-
+### Pre-requisites
 Expects the result of your cucumber test to be saved into a json file.
-
 
 ### Format for customising cucumber report:
 
@@ -52,7 +49,7 @@ Sample JSON:
 custom-cucumber-report-generator -f <path-to-result-json-file>
 ```
 
-- Generating report (using custom template option [-i])
+- Generating report (using custom template option `[-i]`)
 ```
 custom-cucumber-report-generator -f <path-to-result-json-file> -i <path-to-custom-template-json-file>
 ```
@@ -64,12 +61,12 @@ output/report/cucumber-report.html
 
 ### Optional Arguments
 
-- Specify location to output report to [-o]
+- Specify location to output report to `[-o]`
 ```
 custom-cucumber-report-generator -f '<path-to-result-json-file' -o <output-file-path>
 ```
 
-- Specify location of screenshots [-s]
+- Specify location of screenshots `[-s]`
 ```
 custom-cucumber-report-generator -f '<path-to-result-json-file>' -s <path-to-screenshots>
 ```
