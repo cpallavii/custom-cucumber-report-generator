@@ -19,15 +19,29 @@ JSON reponse as follow :
     "OS": "MacOS"
   } 
 }
-
 ```
-
-or "FilePath"
 
 #### How to generate my report ?
 
 yarn add custom-cucumber-report-generator
 
+### Examples
+
+- default
+```custom-cucumber-report-generator -t```
+- JSON Input
+```custom-cucumber-report-generator -i <path to json input>```
+- File Path
+```custom-cucumber-report-generator -f <filepath>```
+
+### Default Output loction
+```output/report/cucumber-report.html```
+
+Optional Arguments
+
+- add output location ```custom-cucumber-report-generator -f '<filepath>' -o ```
 
 
+#### Ouput
 
+![Screenshot](cucumber-report.png)
