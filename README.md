@@ -1,12 +1,32 @@
 # custom-cucumber-report-generator
 
-#### Purpose
-To create custom reports from user inputs.
+## Purpose
+To create custom reports from user inputs. 
 
-#### Possible user inputs
-Possible user input can be a ```JSON``` or ```filepath```
-### JSON Format
-JSON reponse as follow :
+This uses [cucumber-html-reporter](https://www.npmjs.com/package/cucumber-html-reporter) to generate the cucumber report, and provides a wrapper around it to allow users to set file inputs.
+
+## Installation 
+
+```
+npm install custom-cucumber-report-generator
+```
+
+or
+
+```
+yarn add custom-cucumber-report-generator
+```
+
+### Cucumber result input
+
+Expects the result of your cucumber test to be saved into a json file.
+
+
+### Format for customising cucumber report:
+
+JSON format from [cucumber-html-reporter](https://www.npmjs.com/package/cucumber-html-reporter)
+
+Sample JSON:
 ```
 {
   jsonFile: "result-from-cucumber-run.json",
@@ -21,27 +41,29 @@ JSON reponse as follow :
 }
 ```
 
-#### How to generate my report ?
 
-yarn add custom-cucumber-report-generator
+## How to generate my report?
 
-### Examples
 
-- default
-```custom-cucumber-report-generator -t```
-- JSON Input
-```custom-cucumber-report-generator -i <path to json input>```
-- File Path
-```custom-cucumber-report-generator -f <filepath>```
+### Usage examples:
 
-### Default Output loction
+- Generating report (using default template option)
+```custom-cucumber-report-generator -f <path-to-result-json-file>```
+
+- Generating report (using custom template option [-i]
+```custom-cucumber-report-generator -f <path-to-result-json-file> -i <path-to-custom-template-json-file>```
+
+### Default Output location
 ```output/report/cucumber-report.html```
 
-Optional Arguments
+### Optional Arguments
 
-- add output location ```custom-cucumber-report-generator -f '<filepath>' -o ```
+- Specify location to output report to [-o]
+```custom-cucumber-report-generator -f '<path-to-result-json-file' -o <output-file-path>```
 
+- Specify location of screenshots [-s]
+```custom-cucumber-report-generator -f '<path-to-result-json-file>' -s <path-to-screenshots>```
 
-#### Ouput
+## Report Output
 
 ![Screenshot](cucumber-report.png)
