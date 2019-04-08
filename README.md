@@ -52,7 +52,7 @@ Sample JSON:
 custom-cucumber-report-generator -f <path-to-result-json-file>
 ```
 
-- Generating report (using custom template option [-i]
+- Generating report (using custom template option [-i])
 ```
 custom-cucumber-report-generator -f <path-to-result-json-file> -i <path-to-custom-template-json-file>
 ```
