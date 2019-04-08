@@ -15,12 +15,12 @@ describe('Unit test for custom report generator', () => {
     // -i > input file path
 
     test('Error message is returned when incorrect number of parameters passed in', () => {
-      expect(getArgs).toThrow('Incorrect number of parameters called, expect "-f <filename>" OR -i <json>')
+      expect(getArgs).toThrow('Incorrect number of parameters provided, expect "-f <filename>')
     })
 
     test('Error is returned for missing parameters', () => {
       process.argv.push('', '', '')
-      expect(getArgs).toThrow('Missing parameter "-f <filename>" OR -i <json>')
+      expect(getArgs).toThrow('Missing parameter "-f <filename>"')
     })
 
     test('Verify no error message for correct -f parameter is passed in', () => {
@@ -28,9 +28,9 @@ describe('Unit test for custom report generator', () => {
       expect(getArgs).not.toThrow()
     })
 
-    test('Verify no error message for correct -i parameter is passed in', () => {
+    test('Verify error message if only -i parameter is passed in', () => {
       process.argv.push('', '-i', 'sample/sample-report-format.json')
-      expect(getArgs).not.toThrow()
+      expect(getArgs).toThrow('Missing parameter "-f <filename>"')
     })
 
     test('Verify no error message for correct -t parameter is passed in', () => {
@@ -73,11 +73,13 @@ describe('Unit test for custom report generator', () => {
       process.argv.push('-f', 'fakeLocation/fake/fakeSample.json')
       expect(getOptions).toThrow('No file found in path: fakeLocation/fake/fakeSample.json')
     })
+
     test('Verify report is generated for parameter -f and file exist', () => {
       process.argv.push('-f', 'sample/sample-results.json')
       const options = getOptions()
       expect(options).toEqual(expectedOptions)
     })
+
     test('Verify report is generated for parameter -f and -o, also output file location is changed', () => {
       process.argv.push('', '-f', 'sample/sample-results.json', '-o', 'output/report.html')
       const options = getOptions()
@@ -93,17 +95,22 @@ describe('Unit test for custom report generator', () => {
       expect(options).toEqual(expectedOptions)
     })
 
-    test('Verify no error message if fileName is not passed for option -i', () => {
+    test('Verify error message if option -f is passed in with no filename', () => {
+      process.argv.push('', '-f', '')
+      expect(getOptions).toThrow('Missing "-f <filename>" parameter')
+    })
+
+    test('Verify error message if option -f is not passed in with option -i', () => {
       process.argv.push('', '-i', '')
-      expect(getOptions).toThrow('Missing \"-f <filename>\" parameter OR -i <json> parameter')
+      expect(getOptions).toThrow('Missing parameter "-f <filename>"')
     })
 
     test('Verify report file path is correct for -i parameter', () => {
-      process.argv.push('', '-i', 'fake/fake-report-format.json')
+      process.argv.push('', '-f', 'sample/sample-results.json', '-i', 'fake/fake-report-format.json')
       expect(getOptions).toThrow(`No file found in path: fake/fake-report-format.json`)
     })
-    test('Verify report is generated for parameter -i', () => {
-      process.argv.push('', '-i', 'sample/sample-input.json')
+    test('Verify report is generated for parameter -f and -i', () => {
+      process.argv.push('', '-f', 'sample/sample-results.json', '-i', 'sample/sample-input.json')
       const options = getOptions()
       expectedOptions.metadata.Browser = "Chrome/74.0.3723.0"
       expectedOptions.metadata.Platform = "MACOSX"
@@ -113,7 +120,7 @@ describe('Unit test for custom report generator', () => {
       expectedOptions.storeScreenshots = true
       expect(options).toEqual(expectedOptions)
     })
-    test('Verify report is generated for parameter -i and no theme', () => {
+    test('Verify report is generated for parameter -i and no theme and default theme is applied', () => {
       let noTheme = {
         "jsonFile": "sample/sample-results.json",
         "output": "output/report/cucumber_report.html",
@@ -130,7 +137,7 @@ describe('Unit test for custom report generator', () => {
         },
       });
 
-      process.argv.push('', '-i', 'sample/no-theme.json')
+      process.argv.push('', '-f', 'sample/sample-results.json', '-i', 'sample/no-theme.json')
       const options = getOptions()
       let expectedNoTheme = noTheme
       expectedNoTheme.theme = 'bootstrap'
@@ -156,7 +163,7 @@ describe('Unit test for custom report generator', () => {
         },
       });
 
-      process.argv.push('', '-i', 'sample/no-jsonFile.json')
+      process.argv.push('', '-f', 'sample/sample-results.json', '-i', 'sample/no-jsonFile.json')
       expect(getOptions).toThrow(`-i {options} is missing options.jsonFile`)
 
       fsmock.restore()

@@ -13,14 +13,14 @@ function getArgs() {
 
   if (process.argv.length >= 2) {
     const argsv = parseArgs(process.argv);
-    if (argsv.f || argsv.i || argsv.t) {
+    if (argsv.f || argsv.t) {
       return argsv;
     } else {
-      throw new Error('Missing parameter "-f <filename>" OR -i <json>');
+      throw new Error('Missing parameter "-f <filename>"');
     }
   } else {
     throw new Error(
-      'Incorrect number of parameters called, expect "-f <filename>" OR -i <json>'
+      'Incorrect number of parameters provided, expect "-f <filename>"'
     );
   }
 }
@@ -38,24 +38,26 @@ function getOptions() {
   // // -s > screenshots folder location eg. output/screenshots
   // // -i > input file path or json object
 
-  if (args.f) {
+  if (args.f && args.f != true) {
     resultsFile = args.f;
+
+    if (_.isString(args.i)) {
+      setOptions = false;
+      if (!fse.pathExistsSync(`${args.i}`)) {
+        throw new Error(`No file found in path: ${args.i}`);
+      }
+
+      options = fse.readJSONSync(args.i);
+      if (!options.hasOwnProperty('jsonFile')) {
+        throw new Error(
+          '-i {options} is missing options.jsonFile'
+        );
+      }
+    }
   } else if (args.t) {
     resultsFile = 'sample/sample-results.json';
-  } else if (_.isString(args.i)) {
-    setOptions = false;
-    if (!fse.pathExistsSync(`${args.i}`)) {
-      throw new Error(`No file found in path: ${args.i}`);
-    }
-
-    options = fse.readJSONSync(args.i);
-    if (!options.hasOwnProperty('jsonFile')) {
-      throw new Error(
-        '-i {options} is missing options.jsonFile'
-      );
-    }
   } else {
-    throw new Error('Missing "-f <filename>" parameter OR -i <json> parameter');
+    throw new Error('Missing "-f <filename>" parameter');
   }
 
   if (setOptions) {
