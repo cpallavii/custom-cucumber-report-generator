@@ -1,6 +1,6 @@
 {
   "name": "custom-cucumber-report-generator",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "To create custom cucumber report based on user input",
   "main": "index.js",
   "bin": "./index.js",
