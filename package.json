@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "To create custom cucumber report based on user input",
   "main": "index.js",
+  "bin": "./index.js",
   "scripts": {
     "sample-report": "node index.js -t",
     "test": "jest",
