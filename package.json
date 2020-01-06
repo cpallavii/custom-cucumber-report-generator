@@ -1,9 +1,11 @@
 {
   "name": "custom-cucumber-report-generator",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "To create custom cucumber report based on user input",
   "main": "index.js",
-  "bin": "./index.js",
+  "bin": {
+    "custom-cucumber-report-generator": "./index.js"
+  },
   "scripts": {
     "sample-report": "node index.js -t",
     "test": "jest",
