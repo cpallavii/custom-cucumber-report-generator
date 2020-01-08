@@ -49,12 +49,12 @@ Sample JSON:
 
 - Generating report (using default template option)
 ```
-custom-cucumber-report-generator -f <path-to-result-json-file>
+./node_modules/.bin/custom-cucumber-report-generator -f <path-to-result-json-file>
 ```
 
 - Generating report (using custom template option `[-i]`)
 ```
-custom-cucumber-report-generator -f <path-to-result-json-file> -i <path-to-custom-template-json-file>
+./node_modules/.bin/custom-cucumber-report-generator -f <path-to-result-json-file> -i <path-to-custom-template-json-file>
 ```
 
 ### Default Output location
@@ -66,12 +66,12 @@ output/report/cucumber-report.html
 
 - Specify location to output report to `[-o]`
 ```
-custom-cucumber-report-generator -f '<path-to-result-json-file' -o <output-file-path>
+./node_modules/.bin/custom-cucumber-report-generator -f '<path-to-result-json-file' -o <output-file-path>
 ```
 
 - Specify location of screenshots `[-s]`
 ```
-custom-cucumber-report-generator -f '<path-to-result-json-file>' -s <path-to-screenshots>
+./node_modules/.bin/custom-cucumber-report-generator -f '<path-to-result-json-file>' -s <path-to-screenshots>
 ```
 
 ## Report Output

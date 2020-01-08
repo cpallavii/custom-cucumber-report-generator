@@ -1,5 +1,13 @@
-const { getOptions, getArgs } = require('./utils')
+const { getOptions, getArgs, generateReport } = require('./utils')
 const fsmock = require('mock-fs')
+const fsExtra = require('fs-extra')
+const fs = require('fs')
+
+global.console = {
+  log: jest.fn(),
+  info: jest.fn(),
+  error: jest.fn()
+}
 
 describe('Unit test for custom report generator', () => {
   describe('Validate different parameters', () => {
@@ -45,11 +53,12 @@ describe('Unit test for custom report generator', () => {
 
   })
 
-  describe('Generate report using default options', () => {
+  describe('Generate options config using default options', () => {
     beforeEach(() => {
       // reset process.argv to known state
       process.argv = []
     })
+
     let expectedOptions = {
       "jsonFile": "sample/sample-results.json",
       "launchReport": false,
@@ -63,30 +72,32 @@ describe('Unit test for custom report generator', () => {
       "reportSuiteAsScenarios": false,
       "theme": "bootstrap"
     }
-    test('Verify report is generated for parameter -t', () => {
+
+    test('Verify options config is generated for parameter -t', () => {
       process.argv.push('', '-t')
       const options = getOptions()
       expect(options).toEqual(expectedOptions)
     })
 
-    test('Verify report is not generated for parameter -f when file not exist', () => {
+    test('Verify options config is not generated for parameter -f when file not exist', () => {
       process.argv.push('-f', 'fakeLocation/fake/fakeSample.json')
       expect(getOptions).toThrow('No file found in path: fakeLocation/fake/fakeSample.json')
     })
 
-    test('Verify report is generated for parameter -f and file exist', () => {
+    test('Verify options config is generated for parameter -f and file exist', () => {
       process.argv.push('-f', 'sample/sample-results.json')
       const options = getOptions()
       expect(options).toEqual(expectedOptions)
     })
 
-    test('Verify report is generated for parameter -f and -o, also output file location is changed', () => {
+    test('Verify options config is generated for parameter -f and -o, also output file location is changed', () => {
       process.argv.push('', '-f', 'sample/sample-results.json', '-o', 'output/report.html')
       const options = getOptions()
       expectedOptions.output = 'output/report.html'
       expect(options).toEqual(expectedOptions)
     })
-    test('Verify report is generated for parameter -f and -s', () => {
+
+    test('Verify options config is generated for parameter -f and -s', () => {
       process.argv.push('', '-f', 'sample/sample-results.json', '-s', 'output/screenshots')
       expectedOptions.screenshotsDirectory = "output/screenshots"
       expectedOptions.output = "output/report/cucumber-report.html"
@@ -109,7 +120,8 @@ describe('Unit test for custom report generator', () => {
       process.argv.push('', '-f', 'sample/sample-results.json', '-i', 'fake/fake-report-format.json')
       expect(getOptions).toThrow(`No file found in path: fake/fake-report-format.json`)
     })
-    test('Verify report is generated for parameter -f and -i', () => {
+
+    test('Verify options config is generated for parameter -f and -i', () => {
       process.argv.push('', '-f', 'sample/sample-results.json', '-i', 'sample/sample-input.json')
       const options = getOptions()
       expectedOptions.metadata.Browser = "Chrome/74.0.3723.0"
@@ -120,7 +132,8 @@ describe('Unit test for custom report generator', () => {
       expectedOptions.storeScreenshots = true
       expect(options).toEqual(expectedOptions)
     })
-    test('Verify report is generated for parameter -i and no theme and default theme is applied', () => {
+
+    test('Verify options config is generated for parameter -i and no theme and default theme is applied', () => {
       let noTheme = {
         "jsonFile": "sample/sample-results.json",
         "output": "output/report/cucumber_report.html",
@@ -146,7 +159,7 @@ describe('Unit test for custom report generator', () => {
       fsmock.restore()
     })
 
-    test('Verify report is not generated for parameter -i and no jsonFile', () => {
+    test('Verify options config is not generated for parameter -i and no jsonFile', () => {
 
       let noJsonFile = {
         "output": "output/report/cucumber_report.html",
@@ -167,6 +180,91 @@ describe('Unit test for custom report generator', () => {
       expect(getOptions).toThrow(`-i {options} is missing options.jsonFile`)
 
       fsmock.restore()
+    })
+
+    test('Verify options config is generated for parameter -i and output file name is specified', () => {
+      let customReportName = {
+        "jsonFile": "sample/sample-results.json",
+        "output": "output/report/my-report.html",
+        "screenshotsDirectory": "output/screenshots/",
+        "reportSuiteAsScenarios": false,
+        "launchReport": false,
+        "storeScreenshots": true
+      }
+      fsmock({
+        'sample': {
+          'custom-report-name.json': `${JSON.stringify(customReportName)}`,
+          'sample-results.json': { "abc": "def" }
+        },
+      });
+
+      process.argv.push('', '-f', 'sample/sample-results.json', '-i', 'sample/custom-report-name.json')
+      const options = getOptions()
+      expect(options.output).toEqual(customReportName.output)
+
+      fsmock.restore()
+    })
+
+    test('Verify options config is generated for parameter -i and output config not set', () => {
+      let noOutputInConfig = {
+        "jsonFile": "sample/sample-results.json",
+        "screenshotsDirectory": "output/screenshots/",
+        "reportSuiteAsScenarios": false,
+        "launchReport": false,
+        "storeScreenshots": true
+      }
+      fsmock({
+        'sample': {
+          'no-output-in-config.json': `${JSON.stringify(noOutputInConfig)}`,
+          'sample-results.json': { "abc": "def" }
+        },
+      });
+
+      process.argv.push('', '-f', 'sample/sample-results.json', '-i', 'sample/no-output-in-config.json')
+      const options = getOptions()
+      expect(options.output).toEqual('output/report/cucumber-report.html')
+
+      fsmock.restore()
+    })
+  })
+
+  describe('Generate report', () => {
+    beforeEach(() => {
+      // reset process.argv to known state
+      process.argv = []
+      fsExtra.ensureDirSync('test-files')
+    })
+
+    //clean up after each test
+    afterEach(function () {
+      // remove extra folders
+      fsExtra.removeSync('test-files');
+    });
+
+    test('Verify report is generated', () => {
+      let testOptions = {
+        "theme": "bootstrap",
+        "jsonFile": "sample/sample-results.json",
+        "output": "test-files/report/test_report.html",
+        "screenshotsDirectory": "output/screenshots/",
+        "reportSuiteAsScenarios": false,
+        "launchReport": false,
+        "storeScreenshots": true,
+        "metadata": {
+          "App Version": "0.1.0",
+          "Test Environment": "LocalDev",
+          "Browser": "Chrome/74.0.3723.0",
+          "Platform": "MACOSX"
+        }
+      }
+      fsExtra.writeJSONSync('test-files/test-input.json', testOptions)
+
+      process.argv.push('', '-f', 'sample/sample-results.json', '-i', 'test-files/test-input.json')
+      generateReport()
+
+      expect(global.console.log).toHaveBeenCalledWith('Cucumber HTML report test-files/report/test_report.html generated successfully.')
+      expect(fs.existsSync('test-files/report/test_report.html')).toEqual(true);
+
     })
 
   })

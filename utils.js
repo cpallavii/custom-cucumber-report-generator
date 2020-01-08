@@ -32,7 +32,7 @@ function getOptions() {
   let setOptions = true;
 
   // // arguments:
-  // // -t > run using sample results.json
+  // // -t > run using sample-results.json
   // // -f > cucumber results json file eg. sample/sample-results.json
   // // -o > output folder location eg. output/report/my-report.html
   // // -s > screenshots folder location eg. output/screenshots
@@ -78,21 +78,29 @@ function getOptions() {
       }
     };
 
+    // apply output if -o has been set
     if (args.o) {
       options.output = args.o;
-    } else {
+    } 
+
+    // apply screenshotsDirectory if -s has been set
+    if (args.s) {
+      (options.screenshotsDirectory = args.s), (options.storeScreenshots = true);
+    }
+  }
+
+  // set theme to bootstrap if no theme has been set
+  if (!options.hasOwnProperty('theme')) {
+    options.theme = 'bootstrap';
+  }
+
+  // set output to 'output/report/cucumber-report.html' if output has not been set
+  if(!options.hasOwnProperty('output')) {
       let outputFolder = 'output/report';
       fse.ensureDirSync(`${outputFolder}`);
       options.output = `${outputFolder}/cucumber-report.html`;
     }
 
-    if (args.s) {
-      (options.screenshotsDirectory = args.s), (options.storeScreenshots = true);
-    }
-  }
-  if (!options.hasOwnProperty('theme')) {
-    options.theme = 'bootstrap';
-  }
   return options;
 }
 
